@@ -1,4 +1,5 @@
-#Manhwa Tracker
+# Manhwa Tracker
+
 [ ] Membuat sebuah proyek Django baru.
 Pertama kita buat sebuah direktori utama dengan nama manhwa-tracker yang menampung semua file project kita, kemudian buka terminal pada path direktori untuk membuat virtual environment dengan perintah:
 {{ python3 -m venv env }}
