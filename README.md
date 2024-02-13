@@ -2,12 +2,15 @@
 
 [ ] Membuat sebuah proyek Django baru.
 Pertama kita buat sebuah direktori utama dengan nama manhwa-tracker yang menampung semua file project kita, kemudian buka terminal pada path direktori untuk membuat virtual environment dengan perintah:
+
 {{ python3 -m venv env }}
 
 Setelah itu, aktifkan virtual environment dengan perintah berikut:
+
 {{ source env/bin/activate }}
 
 Didalam direktori utama, buat file requirements.txt yang berisi dependencies yang kita perlukan nanti
+
 {{ 
 django
 gunicorn
@@ -18,20 +21,25 @@ urllib3
 }}
 
 lakukan instalasi pada dependencies dengan mengetikkan perintah pada terminal direktori
+
 {{ pip install -r requirements.txt }}
 
 Setelah itu, buat proyek django dengan perintah berikut:
+
 {{ django-admin startproject manhwa_tracker . }}
 
 Proyek django dengan nama subdirektori manhwa_tracker telah ada di didalam direktori utama kita.
 
 [ ] Membuat aplikasi dengan nama main pada proyek tersebut.
+
 Untuk membuat aplikasi baru bernama main jalankan perintah ini pada terminal di direktori utama
+
 {{
     python3 manage.py startapp main
 }}
 
 Kemudian daftarkan aplikasi main tersebut kedalam proyek, dengan cara buka settings.py di dalam direktori manhwa_tracker. Kemudian tambahkan main ke variabel INSTALLED_APPS.
+
 {{
     INSTALLED_APPS = [
     'main',
@@ -45,14 +53,18 @@ Kemudian daftarkan aplikasi main tersebut kedalam proyek, dengan cara buka setti
 }}
 
 [ ] Melakukan routing pada proyek agar dapat menjalankan aplikasi main.
+
 buka berkas dengan nama urls.py di dalam direktori proyek manhwa_tracker untuk menambahkan routing ke proyek main.
 sebelumnya impor fungsi include dari django.urls
+
 {{
     ...
     from django.urls import path, include
     ...
 }}
+
 kemudian, tambahkan rute URL seperti berikut untuk mengarahkan ke tampilan main di dalam variabel urlpatterns.
+
 {{
     urlpatterns = [
     ...
@@ -87,6 +99,7 @@ class Manhwa(models.Model):
 }}
 
 [ ] Membuat sebuah fungsi pada views.py untuk dikembalikan ke dalam sebuah template HTML yang menampilkan nama aplikasi serta nama dan kelas kamu.
+
 Buka berkas views.py pada direktori main, kemudian tambahkan fungsi show main dibawah baris impor
 
 {{
@@ -100,6 +113,7 @@ Buka berkas views.py pada direktori main, kemudian tambahkan fungsi show main di
 }}
 
 kemudian buka berkas main.html yang telah dibuat sebelumnya di direktori manhwa-tracker/main/templates. Kemudian ubah nama dan kelas  menjadi kode django untuk menampilkan nilai dari variabel yang telah didefenisikan dalam context.
+
 {{
     <h5>Name:</h5>
     <p>{{ name }}</p>
@@ -109,6 +123,7 @@ kemudian buka berkas main.html yang telah dibuat sebelumnya di direktori manhwa-
 }}
 
 [ ] Membuat sebuah routing pada urls.py aplikasi main untuk memetakan fungsi yang telah dibuat pada views.py.
+
 untuk membuat routing pada aplikasi main yaitu dengan membuat urls.py pada direktori aplikasi main kemudian menghubungkan juga dengan fungsi show_main
 
 {{
@@ -123,8 +138,10 @@ urlpatterns = [
 }}
 
 [ ] Melakukan deployment ke PWS terhadap aplikasi yang sudah dibuat sehingga nantinya dapat diakses oleh teman-temanmu melalui Internet.
+
 Pertama, kita melakukan register di http://pbp.cs.ui.ac.id/register. Kemudian login, buat New Project sesuai dengan nama direktori kita seperti manhwatracker.
 Setelah itu, pada terminal direktori utama kita ketikkan perintah berikut:
+
 {{
     git remote add pws http://pbp.cs.ui.ac.id/a.nurcahaya/manhwatracker
     git branch -M master
