@@ -77,7 +77,7 @@ rating sebagai rating manhwa dengan tipe FloatField
 {{
     from django.db import models
 
-# Create your models here.
+#Create your models here.
 class Manhwa(models.Model):
     title = models.CharField(max_length=255)
     chapter = models.IntegerField()
