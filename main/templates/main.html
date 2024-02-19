@@ -1,8 +1,35 @@
+{% extends 'base.html' %} {% block content %}
 <h1>Manhwa Tracker Page</h1>
 
 <h5>Name:</h5>
-<p>{{ name }}</p>
-<!-- Ubahlah sesuai dengan nama kamu -->
+<p>{{name}}</p>
+
 <h5>Class:</h5>
-<p>{{ class }}</p>
-<!-- Ubahlah sesuai dengan kelas kamu -->
+<p>{{class}}</p>
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Chapter</th>
+      <th>Genre</th>
+      <th>Sinopsis</th>
+      <th>Rating</th>
+    </tr>
+  
+    {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini
+    {%endcomment %} {% for manhwa in manhwas %}
+    <tr>
+      <td>{{manhwa.title}}</td>
+      <td>{{manhwa.chapter}}</td>
+      <td>{{manhwa.genre}}</td>
+      <td>{{manhwa.sinopsis}}</td>
+      <td>{{manhwa.rating}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  
+  <br />
+  
+  <a href="{% url 'main:create_manhwa' %}">
+    <button>Add New Manhwa</button>
+  </a>
+{% endblock content %}
