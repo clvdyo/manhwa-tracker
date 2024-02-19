@@ -425,6 +425,7 @@ Kita menambahkan juga variabel  didalam fungsi yang menyimpan hasil query dari d
 data = Manhwa.objects.filter(pk=id)
 ```
 >[ ] Membuat routing URL untuk masing-masing views yang telah ditambahkan pada poin 2.
+
 Pada main/urls.py kita mengimpor fungsi yang telah kita buat sebelumnya di views.py dan menambahkan path URL ke dalam urlpatterns dengan menambahkan kode dibawah ini supaya bisa mengakses fungsi yang sudah diimpor tadi.
 ```
 from django.urls import path
