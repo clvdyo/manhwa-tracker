@@ -169,6 +169,7 @@ Oleh karena itu, sangat disarankan untuk menggunakan virtual environment saat me
 
 Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya.
 - MVC (Model-View-Controller), MVT (Model-View-Template), dan MVVM (Model-View-ViewModel) adalah pola desain arsitektur perangkat lunak yang populer untuk memisahkan berbagai aspek aplikasi.
+
 **MVC:**
 
 * **Model:** Menyimpan data dan logika aplikasi.
@@ -454,3 +455,313 @@ urlpatterns = [
 <img src="photosofpostman/json:2.png" alt="localhost:8000/json/2">
 <img src="photosofpostman/json:3.png" alt="localhost:8000/json/3">
 <img src="photosofpostman/json:4.png" alt="localhost:8000/json/4">
+
+## Tugas 4
+
+[ ] Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
+
+**Ingat selalu untuk mengaktifkan virtual environment pada terminal direktori kita**
+>source /env/bin activate
+
+Pada main/views.py tambahkan import redirect, UserCreationForm, dan messages pada bagian paling atas.
+```
+from django.shortcuts import redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+```
+Setelahnya tambahkan fungsi register yang berfungsi untuk menghasilkan formulir registrasi secara otomatis dan menghasilkan akun pengguna ketika data di-submit dari form.
+```
+def register(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+```
+Kemudian, pada templates/main kita tambahkan berkas html dengan nama register.html dengan template sebagai berikut.
+```
+{% extends 'base.html' %} 
+
+{% block meta %}
+<title>Register</title>
+{% endblock meta %} 
+
+{% block content %}
+
+<div class="login">
+  <h1>Register</h1>
+
+  <form method="POST">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+      <tr>
+        <td></td>
+        <td><input type="submit" name="submit" value="Daftar" /></td>
+      </tr>
+    </table>
+  </form>
+
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+
+{% endblock content %}
+```
+Selanjutnya, pada main/urls.py kita mengimpor fungsi register yang ditambahkan tadi dan menambahkannya pada url path supaya bisa diakses.
+```
+from main.views import register
+
+ urlpatterns = [
+     ...
+     path('register/', register, name='register'),
+ ]
+```
+Buka kembali main/views.py untuk menambahkan import authenticate dan login pada bagian paling atas. Lalu kita menambahkan fungsi login_user yang berfungsi untuk mengautentikasi pengguna yang ingin login.
+```
+...
+from django.contrib.auth import authenticate, login
+
+...
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('main:show_main')
+        else:
+            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {}
+    return render(request, 'login.html', context)
+```
+Kemudian, pada templates/main kita tambahkan berkas html baru lagi dengan nama login.html dengan template sebagai berikut.
+```
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Login</title>
+{% endblock meta %} 
+
+{% block content %}
+<div class="login">
+  <h1>Login</h1>
+
+  <form method="POST" action="">
+    {% csrf_token %}
+    <table>
+      <tr>
+        <td>Username:</td>
+        <td>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            class="form-control"
+          />
+        </td>
+      </tr>
+
+      <tr>
+        <td>Password:</td>
+        <td>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            class="form-control"
+          />
+        </td>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td><input class="btn login_btn" type="submit" value="Login" /></td>
+      </tr>
+    </table>
+  </form>
+
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %} Don't have an account yet?
+  <a href="{% url 'main:register' %}">Register Now</a>
+</div>
+
+{% endblock content %}
+```
+Selanjutnya, pada main/urls.py kita mengimpor fungsi login_user yang ditambahkan tadi dan menambahkannya pada url path supaya bisa diakses.
+```
+from main.views import login_user
+
+urlpatterns = [
+   ...
+   path('login/', login_user, name='login'),
+]
+```
+Buka kembali main/views.py untuk menambahkan import logout dan fungsi logout_user yang berfungsi untuk melakukan mekanisme *logout*.
+```
+from django.contrib.auth import logout
+
+...
+def logout_user(request):
+    logout(request)
+    return redirect('main:login')
+```
+Selanjutnya tambahkan potongan kode dibawah pada main/templates/main.html dibawah hyperlink Add New Manhwa untuk button logout.
+```
+...
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+...
+```
+Selanjutnya, pada main/urls.py kita mengimpor fungsi logout_user yang ditambahkan tadi dan menambahkannya pada url path supaya bisa diakses.
+```
+from main.views import logout_user
+
+urlpatterns = [
+   ...
+   path('logout/', logout_user, name='logout'),
+]
+```
+
+[ ] Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model buku yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
+<img src="photosofpostman/dummy1.png" alt="localhost:8000/xml/">
+<img src="photosofpostman/dummy2.png" alt="localhost:8000/xml/1">
+
+[ ] Menghubungkan model Item dengan User.
+
+Buka main/models.py dan kita tambahkan kode berikut pada dibawah baris kode untuk mengimpor model:
+```
+...
+from django.contrib.auth.models import User
+...
+```
+Kemudian tambahkan potongan kode berikut pada model Manhwa yang telah dibuat
+```
+# Create your models here.
+class Manhwa(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ...
+```
+
+Buka kembali main/views.py dan ubah potongan kode pada fungsi create_manhwa menjadi seperti dibawah
+```
+def create_manhwa(request):
+    form = ManhwaForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        manhwa = form.save(commit=False)
+        manhwa.user = request.user
+        manhwa.save()
+        return redirect('main:show_main')
+
+    context = {'form': form}
+    return render(request, "create_manhwa.html", context)
+    ...
+```
+Kemudian ubah fungsi show_main untuk menampilkan objek Manhwa yang terasosiasikan dengan pengguna yang sedang login.
+```
+def show_main(request):
+    manhwas = Manhwa.objects.filter(user=request.user)
+
+    context = {
+        'name': request.user.username,
+        ...
+    }
+```
+Simpan semua perubahan, dan lakukan migrasi model dengan 
+>python manage.py makemigrations
+
+Seharusnya, akan muncul error saat melakukan migrasi model. Pilih 1 untuk menetapkan default value untuk field user pada semua row yang telah dibuat pada basis data.
+Lakukan 
+>python manage.py migrate 
+
+untuk mengaplikasikan migrasi yang dilakukan pada poin sebelumnya.
+
+[ ] Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.
+
+*Sudah diatas* pada foto dummy1 dan dummy2.
+
+[ ] Menjawab beberapa pertanyaan berikut pada README.md pada root folder (silakan modifikasi README.md yang telah kamu buat sebelumnya; tambahkan subjudul untuk setiap tugas).
+
+>*[ ] Apa itu Django UserCreationForm, dan jelaskan apa kelebihan dan kekurangannya?
+
+Django UserCreationForm adalah form bawaan yang digunakan untuk membuat pengguna baru dalam aplikasi Django. Form ini mewarisi dari ModelForm dan memiliki beberapa kelebihan dan kekurangan.
+
+Kelebihan:
+* Mudah digunakan: UserCreationForm hanya memerlukan beberapa baris kode untuk diimplementasikan.
+* Terintegrasi dengan Django auth: Form ini terintegrasi dengan sistem autentikasi Django, sehingga pengguna yang dibuat dengan form ini dapat langsung login ke aplikasi.
+* Validasi password: Form ini melakukan validasi password, memastikan password yang dimasukkan kuat dan aman.
+* Keamanan: Form ini membantu mencegah kebocoran data dengan tidak menyimpan password dalam teks biasa.
+
+Kekurangan:
+ * Kustomisasi terbatas: UserCreationForm hanya memiliki beberapa field bawaan, sehingga kustomisasi formulirnya terbatas.
+ * Tidak ada field email: Form ini tidak memiliki field email bawaan, sehingga Anda perlu menambahkannya secara manual jika ingin pengguna memasukkan alamat emailnya.
+* Tidak ada field tambahan: Form ini tidak memiliki field tambahan untuk informasi pengguna lainnya, seperti nama lengkap, alamat, dll.
+
+>*[ ] Apa perbedaan antara autentikasi dan otorisasi dalam konteks Django, dan mengapa keduanya penting?
+
+Autentikasi dan otorisasi adalah dua konsep penting dalam keamanan aplikasi web Django. Berikut adalah perbedaan antara keduanya:
+
+Autentikasi:
+
+Memverifikasi identitas pengguna, biasanya menggunakan username dan password, token API, atau biometrik.
+
+Otorisasi:
+
+Menentukan apa yang boleh dilakukan pengguna di aplikasi, mengontrol akses ke resources dan fungsionalitas aplikasi. Biasanya menggunakan permissions dan roles.
+
+Mengapa keduanya penting?
+
+Autentikasi dan otorisasi membantu melindungi aplikasi dari akses yang tidak sah dan aktivitas berbahaya. Memastikan bahwa pengguna hanya melihat dan melakukan tindakan yang mereka diizinkan. Memudahkan pengelolaan akses pengguna dalam aplikasi yang kompleks.
+
+>*[ ] Apa itu cookies dalam konteks aplikasi web, dan bagaimana Django menggunakan cookies untuk mengelola data sesi pengguna?
+
+Cookies adalah file kecil yang disimpan di browser pengguna oleh server web. Cookies digunakan untuk menyimpan informasi tentang pengguna dan preferensi mereka, seperti:
+* Status login
+* Preferensi bahasa
+* Item keranjang belanja
+* Riwayat penelusuran
+
+Django menggunakan cookies untuk mengelola data sesi pengguna. Sesi adalah periode waktu di mana pengguna berinteraksi dengan situs web. Django menggunakan cookies untuk menyimpan informasi sesi, seperti:
+* ID sesi
+* Username
+* Waktu terakhir pengguna aktif
+
+Informasi ini disimpan dalam cookie yang disebut sessionid. Cookie ini kedaluwarsa setelah periode waktu tertentu, biasanya setelah beberapa jam.
+
+Django juga menggunakan cookies untuk:
+* Mengingat status login pengguna
+* Menampilkan pesan flash
+* Melacak CSRF token
+
+>*[ ] Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai?
+
+Penggunaan cookies secara default dalam pengembangan web tidak sepenuhnya aman. Meskipun cookies menawarkan banyak manfaat, seperti meningkatkan pengalaman pengguna dan kinerja, terdapat beberapa risiko potensial yang perlu diwaspadai:
+
+1.⁠ ⁠Pelacakan Pengguna: Cookies dapat digunakan untuk melacak pengguna di seluruh situs web, yang dapat menimbulkan masalah privasi. Pengguna mungkin tidak menyadari bahwa mereka dilacak, dan informasi mereka dapat dijual kepada pihak ketiga.
+
+2.⁠ ⁠Serangan CSRF: Cross-Site Request Forgery (CSRF) adalah jenis serangan di mana penyerang menipu pengguna untuk melakukan tindakan yang tidak diinginkan pada situs web. Cookies dapat digunakan untuk mempermudah serangan CSRF.
+
+3.⁠ ⁠Pencurian Cookie: Cookies dapat dicuri oleh penyerang, memungkinkan mereka untuk menyamar sebagai pengguna lain dan mendapatkan akses ke akun mereka.
+
+4.⁠ ⁠Pemalsuan Cookie: Cookies dapat dipalsukan oleh penyerang, memungkinkan mereka untuk menipu situs web agar percaya bahwa mereka adalah pengguna yang sah.
+
+>*[ ] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+**Diatas**
