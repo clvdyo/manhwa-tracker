@@ -1,4 +1,17 @@
 {% extends 'base.html' %} {% block content %}
+<style>
+  body {
+    background-color: #e0e0e0;
+  }
+  .add_manhwa_btn {
+    background-color: #4caf50;
+    color: white;
+  }
+  .add_manhwa_btn:hover {
+    background-color: #45a049;
+  }
+</style>
+
 <h1>Add New Manhwa</h1>
 
 <form method="POST">
@@ -8,7 +21,7 @@
     <tr>
       <td></td>
       <td>
-        <input type="submit" value="Add Manhwa" />
+        <input class="btn add_manhwa_btn" type="submit" value="Add Manhwa" />
       </td>
     </tr>
   </table>

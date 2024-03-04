@@ -1,5 +1,7 @@
 # Manhwa Tracker
 
+## Tugas 2
+
 [ ] Membuat sebuah proyek Django baru.
 Pertama kita buat sebuah direktori utama dengan nama manhwa-tracker yang menampung semua file project kita, kemudian buka terminal pada path direktori untuk membuat virtual environment dengan perintah:
 
@@ -765,3 +767,67 @@ Penggunaan cookies secara default dalam pengembangan web tidak sepenuhnya aman. 
 
 >*[ ] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 **Diatas**
+
+## Tugas 5
+
+[ ] Kustomisasi desain pada templat HTML yang telah dibuat pada Tugas 4 dengan menggunakan CSS atau CSS framework (seperti Bootstrap, Tailwind, Bulma) dengan ketentuan sebagai berikut
+
+* [ ] Kustomisasi halaman login, register, dan tambah item semenarik mungkin.
+* [ ] Kustomisasi halaman daftar item menjadi lebih berwarna dan menggunakan apporach lain selain tabel seperti dengan menggunakan Card.
+
+[ ] Menambahkan opsi update dan delete pada masing-masing item.
+
+[ ] Menjawab beberapa pertanyaan berikut pada README.md pada root folder (silakan modifikasi README.md yang telah kamu buat sebelumnya; tambahkan subjudul untuk setiap tugas).
+* [ ] Jelaskan manfaat dari setiap element selector dan kapan waktu yang tepat untuk menggunakannya.
+
+Universal Selector
+
+Universal selector digunakan untuk memilih semua elemen di dalam dokumen HTML. Saat ingin memberikan gaya global pada semua elemen dalam dokumen, seperti reset styling atau penerapan gaya dasar kita bisa menggunakan selector ini. Contoh penggunaan: 
+```
+* {
+  text-align: center;
+  color: blue;
+}
+```
+Potongan kode diatas akan memberikan gaya global dengan text center dan warna text biru pada semua halaman.
+
+Element Selector 
+
+Element selector digunakan untuk memilih elemen HTML berdasarkan nama tagnya. Ini adalah bentuk paling sederhana dari selektor CSS. Ketika ingin menstyle semua elemen dengan tag tertentu kita bisa menggunakan element selector ini.
+
+Class Selector
+
+Class Selector digunakan untuk memilih elemen HTML berdasarkan atribut kelasnya. Mereka berguna ketika ingin menerapkan gaya ke beberapa elemen dengan nama kelas yang sama.
+
+ID Selector
+
+ID Selector digunakan untuk memilih elemen HTML tertentu berdasarkan atribut ID-nya. Atribut ID harus unik dalam sebuah halaman. Ketika ingin menstyle elemen unik dengan ID tertentu kita bisa menggunakan ID selector.
+
+Attribute Selector
+
+Attribute Selector digunakan untuk memilih elemen HTML berdasarkan atributnya. Selektor ini berguna ketika ingin memilih elemen berdasarkan nilai atribut tertentu. Ketika ingin menstyle elemen berdasarkan attribute yang dimilikinya kita bisa menggunakan attribute selector.
+
+* [ ] Jelaskan HTML5 Tag yang kamu ketahui.
+```
+<body>: Bagian yang berisi konten utama yang akan ditampilkan di halaman web
+<header>: element untuk header halaman web
+<nav>: element untuk navigasi halaman web
+<aside>: elemen untuk konten terkait, tetapi terpisah dari konten utama. Biasanya terdapat di samping konten utama.
+<section>: element untuk mengelompokkan konten terkait
+<article>: element untuk konten mandiri, seperti entri blog atau berita.
+<footer>: element untuk footer halaman web
+<img>: element untuk menampilkan gambar
+```
+
+* [ ] Jelaskan perbedaan antara margin dan padding.
+
+Padding: mengosongkan area di sekitar konten (transparan). Digunakan untuk mengatur jarak antara konten dengan border elemen, membuat ruang kosong di sekitar konten, misalnya untuk teks, dan membuat efek visual, seperti inset shadow.
+
+Margin: mengosongkan area di sekitar border (transparan). Digunakan untuk mengatur jarak antar elemen, membuat elemen "mengambang" di tengah layout, dan membuat kelompok elemen yang terpisah.
+
+* [ ] Jelaskan perbedaan antara framework CSS Tailwind dan Bootstrap. Kapan sebaiknya kita menggunakan Bootstrap daripada Tailwind, dan sebaliknya?
+> Tailwind CSS membangun tampilan dengan menggabungkan kelas-kelas utilitas yang telah didefinisikan sebelumnya. Tailwind CSS memiliki memberikan fleksibilitas dan adaptabilitas tinggi terhadap proyek. Tailwind membutuhkan waktu dan pemahaman CSS yang lebih baik untuk digunakan secara efektif.
+
+> Bootstrap menggunakan gaya dan komponen yang telah didefinisikan, yang memiliki tampilan yang sudah jadi dan dapat digunakan secara langsung. Bootstrap sering kali menghasilkan tampilan yang lebih konsisten di seluruh proyek karena menggunakan komponen yang telah didefinisikan. Bootstrap memiliki pembelajaran yang lebih cepat untuk pemula karena dapat mulai dengan komponen yang telah didefinisikan.
+
+> Mengenai kapan harus menggunakan salah satu dari keduanya, itu tergantung pada kebutuhan proyek. Jika membutuhkan komponen yang sudah jadi dan sistem grid, Bootstrap mungkin merupakan pilihan yang lebih baik. Namun, jika lebih memilih pendekatan yang mengutamakan utilitas dan menginginkan kerangka kerja yang ringan dan dapat dikustomisasi, Tailwind CSS mungkin lebih cocok. Singkatnya, baik Tailwind CSS maupun Bootstrap adalah kerangka kerja CSS yang kuat dengan kekuatan uniknya masing-masing. Pilihan di antara keduanya tergantung pada kebutuhan spesifik proyek.

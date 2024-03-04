@@ -36,6 +36,29 @@ def create_manhwa(request):
     context = {'form': form}
     return render(request, "create_manhwa.html", context)
 
+def edit_manhwa(request, id):
+    # Get manhwa berdasarkan ID
+    book = Manhwa.objects.get(pk = id)
+
+    # Set manhwa sebagai instance dari form
+    form = ManhwaForm(request.POST or None, instance=book)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_manhwa.html", context)
+
+def delete_manhwa(request, id):
+    # Get data berdasarkan ID
+    manhwa = Manhwa.objects.get(pk = id)
+    # Hapus data
+    manhwa.delete()
+    # Kembali ke halaman awal
+    return HttpResponseRedirect(reverse('main:show_main'))
+
 def show_xml(request):
     data = Manhwa.objects.all()
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")

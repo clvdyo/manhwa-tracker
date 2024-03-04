@@ -1,40 +1,86 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light]">
+  <a class="navbar-brand" href="#">Manhwa Tracker</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'main:create_manhwa' %}">Add New Manhwa</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'main:logout' %}">Logout</a> </li>
+    </ul>
+  </div>
+</nav>
+
 <h1>Manhwa Tracker Page</h1>
 
 <h5>Name:</h5>
-<p>{{name}}</p>
+<p>{{ name }}</p>
 
 <h5>Class:</h5>
-<p>{{class}}</p>
-  <table>
-    <tr>
-      <th>Title</th>
-      <th>Chapter</th>
-      <th>Genre</th>
-      <th>Sinopsis</th>
-      <th>Rating</th>
-    </tr>
-  
-    {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini
-    {%endcomment %} {% for manhwa in manhwas %}
-    <tr>
-      <td>{{manhwa.title}}</td>
-      <td>{{manhwa.chapter}}</td>
-      <td>{{manhwa.genre}}</td>
-      <td>{{manhwa.sinopsis}}</td>
-      <td>{{manhwa.rating}}</td>
-    </tr>
-    {% endfor %}
-  </table>
-  
-  <br />
-  
-  <a href="{% url 'main:create_manhwa' %}">
-    <button>Add New Manhwa</button>
-  </a>
+<p>{{ class }}</p>
 
-  <a href="{% url 'main:logout' %}">
-    <button>Logout</button>
-  </a>
-  <h5>Sesi terakhir login: {{ last_login }}</h5>
+<div class="row">
+  {% for manhwa in manhwas %}
+    <div class="col-md-4 mb-3">
+      <div class="card text-white">
+        <div class="card-body">
+          <h5 class="card-title">{{ manhwa.title }}</h5>
+          <p class="card-text">
+            <b>Chapter:</b> {{ manhwa.chapter }}<br>
+            <b>Genre:</b> {{ manhwa.genre }}<br>
+            <b>Sinopsis:</b> {{ manhwa.sinopsis }}<br>
+            <b>Rating:</b> {{ manhwa.rating }}
+          </p>
+          <a href="{% url 'main:edit_manhwa' manhwa.pk %}" class="btn btn-light">Edit</a>
+          <a href="{% url 'main:delete_manhwa' manhwa.pk %}" class="btn btn-danger">Delete</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+
+<style>
+  body {
+    background-color: #e0e0e0;
+  }
+  .navbar {
+    background-color: #4caf50;
+  }
+  .navbar-brand {
+    color: white;
+  }
+  .navbar-nav .nav-link {
+    color: white;
+  }
+  .card {
+    border-color: #4caf50;
+    background-color: #487eb0;
+  }
+  .card-title {
+    color: #353b48;
+  }
+  .card-text b {
+    color: #353b48;
+  }
+  .btn-light {
+    background-color: #4caf50;
+    color: white;
+  }
+  .btn-danger {
+    background-color: #f44336;
+    color: white;
+  }
+</style>
 {% endblock content %}
