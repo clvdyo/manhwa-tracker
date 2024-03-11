@@ -1,5 +1,9 @@
 # Manhwa Tracker
 
+Nama: A. Nurcahaya Tampubolon<br>
+NPM: 2306335575<br>
+Kelas: PBP A Genap<br>
+
 ## Tugas 2
 
 <details>
@@ -879,10 +883,45 @@ Modal di-trigger dengan menekan suatu tombol pada halaman utama. Saat penambahan
 
 > Jelaskan perbedaan antara asynchronous programming dengan synchronous programming.
 
+Pada _synchronous programming_, program berjalan secara sekuensial atau berurutan. Artinya, operasi dieksekusi satu per satu dan menunggu hingga operasi sebelumnya selesai agar bisa melanjutkan ke operasi berikutnya.
+
+Sementara itu, pada _asynchronous programming_, program dapat berjalan secara paralel atau bersamaan. Artinya, program tidak perlu menunggu suatu operasi selesai agar dapat melanjutkan ke operasi berikutnya. Untuk mengimplementasikan _asynchronous programming_, dapat digunakan konsep seperti _callback_, _promise_, atau _async_/_await_ dalam javascript. 
+
+
 > Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
+
+Event-driven programming adalah sebuah paradigma di mana suatu kode dapat menunggu terjadinya suatu event/peristiwa terjadi sebelum kode tersebut dieksekusi. Contohnya, pada tugas kali ini, ada tombol untuk menambahkan manhwa dengan id `button_add` yang akan menjalankan fungsi `addManhwa` ketika terjadi event `onclick` (tombok diklik).
 
 > Jelaskan penerapan asynchronous programming pada AJAX.
 
+Penerapan _asynchronous programming_ pada AJAX memungkinkan _request_ ke server dan penanganan _response_ dilakukan secara _asynchronous_. Artinya, program javascript tidak akan terhenti saat menunggu _response_ dari server. Penerapannya dapat dilakukan dengan menambahkan `async` dan `await` pada javascript. Fungsi `async` digunakan untuk menandai fungsi sebagai fungsi yang dapat mengembalikan nilai secara _asynchronous_, sedangkan fungsi `await` digunakan untuk menunggu hasil dari fungsi `async`. Berikut adalah contoh penerapannya pada tugas ini.
+```javascript
+async function getItems() {
+    return fetch("{% url 'main:get_item_json' %}").then((res) => res.json())
+}
+
+async function refreshItems() {
+    ...
+    const manhwas = await getItems()
+    ...
+}
+```
+
 > Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
 
+1. Fetch API
+- Lebih banyak didukung oleh browser modern
+- Menggunakan _fetch_ dan _response_
+- Lebih ringan karena hanya menggunakan javascript standar.
+- Menggunakan _promise_ untuk handle kode _asynchronous_.
+
+2. JQuery
+- Merupakan library eksternal javascript yang telah ada sejak lama dan telah digunakan secara luas di web.
+- Menggunakan callback _success_ dan _error_
+- Lebih berat karena menggunakan library eksternal.
+- Menggunakan callback untuk handle kode _asynchronous_.
+
+Menurut saya, pilihan antara Fetch API dan JQuery tergantung pada kebutuhan proyek dan preferensi pribadi. Namun secara keseluruhan, Fetch API lebih bagus untuk digunakan untuk pengembangan aplikasi web modern yang ringan karena tidak perlu menggunakan library eksternal.
+
 > Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+<br> *Sudah diatas*
