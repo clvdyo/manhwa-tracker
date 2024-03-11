@@ -895,7 +895,7 @@ Event-driven programming adalah sebuah paradigma di mana suatu kode dapat menung
 > Jelaskan penerapan asynchronous programming pada AJAX.
 
 Penerapan _asynchronous programming_ pada AJAX memungkinkan _request_ ke server dan penanganan _response_ dilakukan secara _asynchronous_. Artinya, program javascript tidak akan terhenti saat menunggu _response_ dari server. Penerapannya dapat dilakukan dengan menambahkan `async` dan `await` pada javascript. Fungsi `async` digunakan untuk menandai fungsi sebagai fungsi yang dapat mengembalikan nilai secara _asynchronous_, sedangkan fungsi `await` digunakan untuk menunggu hasil dari fungsi `async`. Berikut adalah contoh penerapannya pada tugas ini.
-```javascript
+```
 async function getItems() {
     return fetch("{% url 'main:get_item_json' %}").then((res) => res.json())
 }
