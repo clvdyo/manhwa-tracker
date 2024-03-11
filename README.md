@@ -2,6 +2,8 @@
 
 ## Tugas 2
 
+<details open>
+
 [ ] Membuat sebuah proyek Django baru.
 Pertama kita buat sebuah direktori utama dengan nama manhwa-tracker yang menampung semua file project kita, kemudian buka terminal pada path direktori untuk membuat virtual environment dengan perintah:
 
@@ -211,7 +213,12 @@ Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya.
 
 MVC, MVT, dan MVVM adalah pola desain arsitektur perangkat lunak yang populer dengan kelebihan dan kekurangannya masing-masing. Pilihan pola desain yang tepat tergantung pada kebutuhan dan kompleksitas aplikasi kita.
 
+</details>
+
 ## Tugas 3
+
+<details open>
+
 [ ] Apa perbedaan antara form POST dan form GET dalam Django?
 >* Form Post mengirimkan data melalui method POST. Data disembunyikan di dalam body request. Sedangkan form Get mengirimkan data melalui method GET. Data ditampilkan di URL sebagai query parameters.
 >* Form Post tidak ada batas ukuran data yang dikirim. Sedangkan form Get ada batasan ukuran data karena dibatasi oleh URL length limit.
@@ -458,12 +465,16 @@ urlpatterns = [
 <img src="photosofpostman/json:3.png" alt="localhost:8000/json/3">
 <img src="photosofpostman/json:4.png" alt="localhost:8000/json/4">
 
+</details>
+
 ## Tugas 4
+
+<details open>
 
 [ ] Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
 
 **Ingat selalu untuk mengaktifkan virtual environment pada terminal direktori kita**
->source /env/bin activate
+>source env/bin/activate
 
 Pada main/views.py tambahkan import redirect, UserCreationForm, dan messages pada bagian paling atas.
 ```
@@ -768,7 +779,11 @@ Penggunaan cookies secara default dalam pengembangan web tidak sepenuhnya aman. 
 >*[ ] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 **Diatas**
 
+</details>
+
 ## Tugas 5
+
+<details open>
 
 [ ] Kustomisasi desain pada templat HTML yang telah dibuat pada Tugas 4 dengan menggunakan CSS atau CSS framework (seperti Bootstrap, Tailwind, Bulma) dengan ketentuan sebagai berikut
 
@@ -831,3 +846,43 @@ Margin: mengosongkan area di sekitar border (transparan). Digunakan untuk mengat
 > Bootstrap menggunakan gaya dan komponen yang telah didefinisikan, yang memiliki tampilan yang sudah jadi dan dapat digunakan secara langsung. Bootstrap sering kali menghasilkan tampilan yang lebih konsisten di seluruh proyek karena menggunakan komponen yang telah didefinisikan. Bootstrap memiliki pembelajaran yang lebih cepat untuk pemula karena dapat mulai dengan komponen yang telah didefinisikan.
 
 > Mengenai kapan harus menggunakan salah satu dari keduanya, itu tergantung pada kebutuhan proyek. Jika membutuhkan komponen yang sudah jadi dan sistem grid, Bootstrap mungkin merupakan pilihan yang lebih baik. Namun, jika lebih memilih pendekatan yang mengutamakan utilitas dan menginginkan kerangka kerja yang ringan dan dapat dikustomisasi, Tailwind CSS mungkin lebih cocok. Singkatnya, baik Tailwind CSS maupun Bootstrap adalah kerangka kerja CSS yang kuat dengan kekuatan uniknya masing-masing. Pilihan di antara keduanya tergantung pada kebutuhan spesifik proyek.
+
+</details>
+
+## Tugas 6
+
+<details open>
+
+[ ] Mengubah tugas 5 yang telah dibuat sebelumnya menjadi menggunakan AJAX.
+
+[ ] AJAX GET
+
+[ ] Ubahlah kode cards data item agar dapat mendukung AJAX GET.
+
+[ ] Lakukan pengambilan task menggunakan AJAX GET.
+
+[ ] AJAX POST
+
+[ ] Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan item.
+
+Modal di-trigger dengan menekan suatu tombol pada halaman utama. Saat penambahan item berhasil, modal harus ditutup dan input form harus dibersihkan dari data yang sudah dimasukkan ke dalam form sebelumnya.
+
+[ ] Buatlah fungsi view baru untuk menambahkan item baru ke dalam basis data.
+
+[ ] Buatlah path /create-ajax/ yang mengarah ke fungsi view yang baru kamu buat.
+
+[ ] Hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/.
+
+[ ] Lakukan refresh pada halaman utama secara asinkronus untuk menampilkan daftar item terbaru tanpa reload halaman utama secara keseluruhan.
+
+[ ] Menjawab beberapa pertanyaan berikut pada README.md pada root folder (silakan modifikasi README.md yang telah kamu buat sebelumnya; tambahkan subjudul untuk setiap tugas).
+
+> Jelaskan perbedaan antara asynchronous programming dengan synchronous programming.
+
+> Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
+
+> Jelaskan penerapan asynchronous programming pada AJAX.
+
+> Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
+
+> Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
