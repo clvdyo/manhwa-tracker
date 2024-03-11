@@ -2,7 +2,7 @@
 
 ## Tugas 2
 
-<details open>
+<details>
 
 [ ] Membuat sebuah proyek Django baru.
 Pertama kita buat sebuah direktori utama dengan nama manhwa-tracker yang menampung semua file project kita, kemudian buka terminal pada path direktori untuk membuat virtual environment dengan perintah:
@@ -217,7 +217,7 @@ MVC, MVT, dan MVVM adalah pola desain arsitektur perangkat lunak yang populer de
 
 ## Tugas 3
 
-<details open>
+<details>
 
 [ ] Apa perbedaan antara form POST dan form GET dalam Django?
 >* Form Post mengirimkan data melalui method POST. Data disembunyikan di dalam body request. Sedangkan form Get mengirimkan data melalui method GET. Data ditampilkan di URL sebagai query parameters.
@@ -469,7 +469,7 @@ urlpatterns = [
 
 ## Tugas 4
 
-<details open>
+<details>
 
 [ ] Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
 
@@ -783,7 +783,7 @@ Penggunaan cookies secara default dalam pengembangan web tidak sepenuhnya aman. 
 
 ## Tugas 5
 
-<details open>
+<details>
 
 [ ] Kustomisasi desain pada templat HTML yang telah dibuat pada Tugas 4 dengan menggunakan CSS atau CSS framework (seperti Bootstrap, Tailwind, Bulma) dengan ketentuan sebagai berikut
 
