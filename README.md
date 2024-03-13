@@ -859,25 +859,162 @@ Margin: mengosongkan area di sekitar border (transparan). Digunakan untuk mengat
 
 [ ] Mengubah tugas 5 yang telah dibuat sebelumnya menjadi menggunakan AJAX.
 
-[ ] AJAX GET
+  [ ] AJAX GET
 
-[ ] Ubahlah kode cards data item agar dapat mendukung AJAX GET.
+    [ ] Ubahlah kode cards data item agar dapat mendukung AJAX GET.
+    
+    Menambahkan kode berikut sebagai struktur dari cards data manhwa.
+    ```html
+    <div id="manhwa_container"></div>
+    ```
+    Kemudian membuat tag baru, yaitu <Script> dan menambahkan fungsi yang menggunakan fetch() API ke data JSON secara asynchronous dibawah ini.
+    ```javascript
+    <script>
+      async function getManhwas() {
+          return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+      }
+    </script>
+    ```
+    [ ] Lakukan pengambilan task menggunakan AJAX GET.
 
-[ ] Lakukan pengambilan task menggunakan AJAX GET.
+    Selanjutnya menambahkan fungsi baru pada tag <script> dengan nama refreshManhwas() yang digunakan untuk me-refresh data manhwa secara asynchronous.
+    ```javascript
+    async function refreshManhwas() {
+      document.getElementById("manhwa_container").innerHTML = ""
+      const manhwas = await getManhwas();
 
-[ ] AJAX POST
+      let htmlString = `<div class="row">`
+      manhwas.forEach((item) => {
+        htmlString += `
+                <div class="col-md-4 mb-3">
+                  <div class="card text-white">
+                    <div class="card-body">
+                      <h5 class="card-title">${item.fields.title}</h5>
+                      <p class="card-text">
+                        <b>Chapter:</b> ${item.fields.chapter}<br>
+                        <b>Genre:</b> ${item.fields.genre}<br>
+                        <b>Sinopsis:</b> ${item.fields.sinopsis}<br>
+                        <b>Rating:</b> ${item.fields.rating}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                `
+      })
+      htmlString += `</div>`
+      document.getElementById("manhwa_container").innerHTML = htmlString
+    }
+    
+    refreshManhwas()
+    ```
+    document.getElementById("manhwa)_container") digunakan untuk mendapatkan elemen berdasarkan ID nya. Pada baris kode ini, elemen yang dituju adalah tag <div> dengan ID manhwa_container yang sudah dibuat pada tahapan sebelumnya.
 
-[ ] Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan item.
+  [ ] AJAX POST
 
-Modal di-trigger dengan menekan suatu tombol pada halaman utama. Saat penambahan item berhasil, modal harus ditutup dan input form harus dibersihkan dari data yang sudah dimasukkan ke dalam form sebelumnya.
+    [ ] Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan item.
+
+    Pertama, membuat modal sebagai form untuk menambahkan Manhwa
+    ```html
+    <div id="manhwa_container"></div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Manhwa</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form id="form" onsubmit="return false;">
+                      {% csrf_token %}
+                      <div class="mb-3">
+                          <label for="title" class="col-form-label">Title:</label>
+                          <input type="text" class="form-control" id="title" name="title"></input>
+                      </div>
+                      <div class="mb-3">
+                          <label for="chapter" class="col-form-label">Chapter:</label>
+                          <input type="number" class="form-control" id="chapter" name="chapter"></input>
+                      </div>
+                      <div class="mb-3">
+                          <label for="genre" class="col-form-label">Genre:</label>
+                          <input type="text" class="form-control" id="genre" name="genre"></input>
+                      </div>
+                      <div class="mb-3">
+                          <label for="sinopsis" class="col-form-label">Sinopsis:</label>
+                          <textarea class="form-control" id="sinopsis" name="sinopsis"></textarea>
+                      </div>
+                      <div class="mb-3">
+                          <label for="rating" class="col-form-label">Rating:</label>
+                          <input type="number" step="0.01" class="form-control" id="rating" name="rating"></input>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Manhwa</button>
+              </div>
+          </div>
+      </div>
+    </div>
+    ```
+    Kemudian menambahkan button yang berfungsi untuk menampilkan modal.
+    ```
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Manhwa by AJAX</button>
+    ```
+
+  >Modal di-trigger dengan menekan suatu tombol pada halaman utama. Saat penambahan item berhasil, modal harus ditutup dan input form harus dibersihkan dari data yang sudah dimasukkan ke dalam form sebelumnya.
 
 [ ] Buatlah fungsi view baru untuk menambahkan item baru ke dalam basis data.
 
-[ ] Buatlah path /create-ajax/ yang mengarah ke fungsi view yang baru kamu buat.
+Impor from django.views.decorators.csrf import csrf_exempt pada views.py.
+Menambahkan fungsi baru pada views.py dengan nama add_manhwa_ajax yang menerima parameter request. Menambahkan dekorator @csrf_exempt di atas fungsi tersebut.
+```python
+@csrf_exempt
+def add_manhwa_ajax(request):
+    if request.method == 'POST':
+        title = request.POST.get("title")
+        chapter = request.POST.get("chapter")
+        genre = request.POST.get("genre")
+        sinopsis = request.POST.get("sinopsis")
+        rating = request.POST.get("rating")
+        user = request.user
 
-[ ] Hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/.
+        new_manhwa = Manhwa(title=title, chapter=chapter, genre=genre, sinopsis=sinopsis, rating=rating, user=user)
+        new_manhwa.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+```
+[ ] Buatlah path /create-manhwa-ajax/ yang mengarah ke fungsi view yang baru kamu buat.
+
+Mengimpor dan menambahkan path url fungsi add_manhwa_ajax ke dalam urlpatterns  di urls.py.
+```python
+path('create-manhwa-ajax/', add_manhwa_ajax, name='add_manhwa_ajax'),
+```
+
+[ ] Hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-manhwa-ajax/.
+
+Membuat fungsi JavaScript baru untuk menambahkan data berdasarkan input ke basis data secara AJAX di dalam main/templates/main.html.
+```javascript
+<script>
+...
+function addManhwa() {
+      fetch("{% url 'main:add_manhwa_ajax' %}", {
+          method: "POST",
+          body: new FormData(document.querySelector('#form'))
+      }).then(refreshManhwas)
+        
+      document.getElementById("form").reset()
+      return false
+  }
+...
+</script>
+```
 
 [ ] Lakukan refresh pada halaman utama secara asinkronus untuk menampilkan daftar item terbaru tanpa reload halaman utama secara keseluruhan.
+
+Menambahkan `refreshManhwas()` pada tag `<script></script>` di main/templates/main.html.
 
 [ ] Menjawab beberapa pertanyaan berikut pada README.md pada root folder (silakan modifikasi README.md yang telah kamu buat sebelumnya; tambahkan subjudul untuk setiap tugas).
 
@@ -890,38 +1027,45 @@ Sementara itu, pada _asynchronous programming_, program dapat berjalan secara pa
 
 > Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
 
-Paradigma event-driven programming adalah paradigma pemrograman yang berfokus pada pengendalian peristiwa. Dalam paradigma ini, program berjalan berdasarkan serangkaian peristiwa yang terjadi. Contoh penerapan paradigma event-driven programming pada manhwa sebelumnya adalah saat tombol "Add Manhwa" diklik, maka akan muncul modal untuk menambahkan manhwa baru. Kemudian, saat tombol "Add Manhwa" pada modal diklik, maka akan menambahkan manhwa baru ke dalam daftar manhwa.
-```
-$("#button_add").on("click", function () {
-    $("#exampleModal").modal("show");
-});
+Paradigma event-driven programming adalah paradigma pemrograman yang berfokus pada pengendalian peristiwa. Dalam paradigma ini, program berjalan berdasarkan serangkaian peristiwa yang terjadi.<br>
 
-$("#form").on("submit", function (e) {
-    e.preventDefault();
-    addManhwa();
-    $("#exampleModal").modal("hide");
-});
+Contoh penerapannya pada tugas adalah penggunaan fungsi addManhwa() yang akan dipanggil saat tombol dengan id button_add diklik. Fungsi ini akan menangani permintaan POST menggunakan AJAX untuk menambahkan data manhwa baru ke server, dan setelah itu akan memanggil fungsi refreshManhwas() untuk memperbarui tampilan kontainer manhwa. Hal ini memungkinkan kontrol aliran program untuk "diarahkan" oleh interaksi pengguna dengan tombol, sehingga tindakan yang diinginkan dapat dilakukan dengan efisiensi tinggi.
+```javascript
+function addManhwa() {
+      fetch("{% url 'main:add_manhwa_ajax' %}", {
+          method: "POST",
+          body: new FormData(document.querySelector('#form'))
+      }).then(refreshManhwas)
+        
+      document.getElementById("form").reset()
+      return false
+  }
+
+  document.getElementById("button_add").onclick = addManhwa
 ```
-Dalam contoh ini, ketika tombol "Add Manhwa" diklik, maka akan muncul modal untuk menambahkan manhwa baru. Kemudian, ketika tombol "Add Manhwa" pada modal diklik, maka akan menambahkan manhwa baru ke dalam daftar manhwa. Proses ini diendalikan melalui event-driven programming, yaitu dengan menggunakan event click pada tombol "Add Manhwa" untuk menampilkan modal dan menggunakan event submit pada form untuk menambahkan manhwa baru.
+Dalam kode di atas, paradigma event-driven programming digunakan untuk mengambil input dari pengguna dan mengirimkannya ke server menggunakan AJAX, sehingga tindakan yang diinginkan dapat dilakukan dengan efisiensi tinggi dan interaktif.
 
 > Jelaskan penerapan asynchronous programming pada AJAX.
 
-Pada AJAX, asynchronous programming digunakan untuk mengirimkan permintaan ke server tanpa menghambat proses utama. Dalam manhwa javascript, penerapan asynchronous programming pada AJAX terlihat pada fungsi $.ajax(). Fungsi ini mengirimkan permintaan ke server dan menunggu respons dari server tanpa menghambat proses utama.
+Asynchronous programming adalah paradigma pemrograman yang memungkinkan beberapa operasi untuk dieksekusi secara bersamaan atau terputus-putus tanpa harus menunggu setiap operasi selesai. Pada tugas ini, asynchronous programming digunakan dalam penerapan AJAX (Asynchronous JavaScript and XML) untuk mengirim permintaan ke server dan menerima respons dari server tanpa harus menunggu sampai permintaan selesai.
+```javascript
+async function getManhwas() {
+      return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+  }
+async function refreshManhwas() {
+    document.getElementById("manhwa_container").innerHTML = ""
+    const manhwas = await getManhwas();
+
+    ...
+  }
+  
+refreshManhwas()
 ```
-function addManhwa() {
-    let formData = $("#form").serializeArray();
-    $.ajax({
-        url: "{% url 'main:add_manhwa_ajax' %}",
-        method: "POST",
-        data: formData,
-    }).done(function () {
-        refreshManhwas();
-        $("#form")[0].reset();
-    });
-    return false;
-}
-```
-Dalam contoh ini, fungsi $.ajax() mengirimkan permintaan ke server untuk menambahkan manhwa baru. Permintaan ini dijalankan secara asinkronus, yaitu tanpa menghambat proses utama. Setelah server memberikan respons, fungsi .done() akan dipanggil untuk memperbarui daftar manhwa dan mengosongkan form.
+Dalam kode di atas, fungsi getManhwas() dan refreshManhwas() menggunakan async dan await untuk mengimplementasikan asynchronous programming. Fungsi getManhwas() menggunakan fetch() untuk mengirim permintaan HTTP GET ke server dan mendapatkan data manhwa dalam format JSON. Fungsi ini didefinisikan sebagai async dan menggunakan await untuk menunggu sampai permintaan selesai sebelum melanjutkan eksekusi.
+
+Setelah data manhwa didapatkan, fungsi refreshManhwas() akan dipanggil dan digunakan untuk memperbarui tampilan kontainer manhwa dengan data yang baru. Fungsi ini juga menggunakan await untuk menunggu sampai fungsi getManhwas() selesai mendapatkan data sebelum melanjutkan eksekusinya.
+
+Dalam kode di atas, asynchronous programming digunakan untuk mengirim permintaan ke server dan menerima respons dari server tanpa harus menunggu sampai permintaan selesai. Hal ini membuat program lebih cepat dan lebih responsif, serta memungkinkan beberapa operasi untuk dieksekusi secara bersamaan atau terputus-putus.
 
 > Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
 
@@ -933,6 +1077,7 @@ Berikut adalah perbandingan antara Fetch API dan library jQuery:
 * Sintaks: Fetch API menggunakan sintaks yang lebih mudah dipahami dan lebih mirip dengan sintaks bawaan browser, sementara library jQuery menggunakan sintaks yang lebih berbeda.<br>
 * Ukuran: Fetch API lebih ringan daripada library jQuery, yang menghasilkan ukuran file yang lebih kecil.<br>
 * Kompatibilitas: Fetch API mungkin tidak kompatibel dengan browser yang lebih lama, sementara library jQuery mendukung browser yang lebih lama.<br>
+
 Berdasarkan perbandingan tersebut, pendapat saya adalah Fetch API lebih baik untuk digunakan karena lebih mudah dipahami, lebih modern, dan lebih ringan. Namun, jika ingin mendukung browser yang lebih lama, mungkin lebih baik menggunakan library jQuery yang lebih komprehensif.
 
 > Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
