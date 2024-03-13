@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
 from django.core import serializers
 from main.forms import ManhwaForm
@@ -107,3 +108,20 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+@csrf_exempt
+def add_manhwa_ajax(request):
+    if request.method == 'POST':
+        title = request.POST.get("title")
+        chapter = request.POST.get("chapter")
+        genre = request.POST.get("genre")
+        sinopsis = request.POST.get("sinopsis")
+        rating = request.POST.get("rating")
+        user = request.user
+
+        new_manhwa = Manhwa(title=title, chapter=chapter, genre=genre, sinopsis=sinopsis, rating=rating, user=user)
+        new_manhwa.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()

@@ -21,7 +21,108 @@
   </div>
 </nav>
 
-<h1>Manhwa Tracker Page</h1>
+<style>
+  body {
+    background-color: #e0e0e0;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  .navbar {
+    background-color: #dcdde1;
+  }
+
+  .navbar-brand {
+    color: #353b48;
+  }
+
+  .navbar-nav .nav-link {
+    color: #353b48;
+    transition: color 0.3s ease;
+  }
+
+  .navbar-nav .nav-link:hover {
+    color: #487eb0;
+  }
+
+  .navbar-nav .nav-link.active {
+    color: #487eb0;
+    font-weight: bold;
+  }
+
+  .card {
+    border: none;
+    background-color: #487eb0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-out;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .card-title {
+    color: #353b48;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-text {
+    color: #353b48;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease-out;
+  }
+
+  .modal-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+  }
+
+  .modal-footer {
+    border-top: none;
+    padding: 1rem;
+    text-align: right;
+  }
+
+  .btn-primary {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: #3e8e41;
+  }
+
+  .btn-secondary {
+    background-color: #fff;
+    color: #4caf50;
+    border: 1px solid #4caf50;
+  }
+
+  .btn-secondary:hover {
+    background-color: #f5f5f5;
+    color: #4caf50;
+  }
+</style>
+
+<h3>Gepeng Pride</h3>
 
 <h5>Name:</h5>
 <p>{{ name }}</p>
@@ -29,58 +130,98 @@
 <h5>Class:</h5>
 <p>{{ class }}</p>
 
-<div class="row">
-  {% for manhwa in manhwas %}
-    <div class="col-md-4 mb-3">
-      <div class="card text-white">
-        <div class="card-body">
-          <h5 class="card-title">{{ manhwa.title }}</h5>
-          <p class="card-text">
-            <b>Chapter:</b> {{ manhwa.chapter }}<br>
-            <b>Genre:</b> {{ manhwa.genre }}<br>
-            <b>Sinopsis:</b> {{ manhwa.sinopsis }}<br>
-            <b>Rating:</b> {{ manhwa.rating }}
-          </p>
-          <a href="{% url 'main:edit_manhwa' manhwa.pk %}" class="btn btn-light">Edit</a>
-          <a href="{% url 'main:delete_manhwa' manhwa.pk %}" class="btn btn-danger">Delete</a>
-        </div>
+<div id="manhwa_container"></div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Manhwa</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="form" onsubmit="return false;">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                      <label for="title" class="col-form-label">Title:</label>
+                      <input type="text" class="form-control" id="title" name="title"></input>
+                  </div>
+                  <div class="mb-3">
+                      <label for="chapter" class="col-form-label">Chapter:</label>
+                      <input type="number" class="form-control" id="chapter" name="chapter"></input>
+                  </div>
+                  <div class="mb-3">
+                      <label for="genre" class="col-form-label">Genre:</label>
+                      <input type="text" class="form-control" id="genre" name="genre"></input>
+                  </div>
+                  <div class="mb-3">
+                      <label for="sinopsis" class="col-form-label">Sinopsis:</label>
+                      <textarea class="form-control" id="sinopsis" name="sinopsis"></textarea>
+                  </div>
+                  <div class="mb-3">
+                      <label for="rating" class="col-form-label">Rating:</label>
+                      <input type="number" step="0.01" class="form-control" id="rating" name="rating"></input>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Manhwa</button>
+          </div>
       </div>
-    </div>
-  {% endfor %}
+  </div>
 </div>
 
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Add Manhwa by AJAX
+</button>
+
+<br />
 <h5>Sesi terakhir login: {{ last_login }}</h5>
 
-<style>
-  body {
-    background-color: #e0e0e0;
+<script>
+  async function getManhwas() {
+      return fetch("{% url 'main:show_json' %}").then((res) => res.json())
   }
-  .navbar {
-    background-color: #4caf50;
+  async function refreshManhwas() {
+    document.getElementById("manhwa_container").innerHTML = ""
+    const manhwas = await getManhwas();
+
+    let htmlString = `<div class="row">`
+    manhwas.forEach((item) => {
+      htmlString += `
+              <div class="col-md-4 mb-3">
+                <div class="card text-white">
+                  <div class="card-body">
+                    <h5 class="card-title">${item.fields.title}</h5>
+                    <p class="card-text">
+                      <b>Chapter:</b> ${item.fields.chapter}<br>
+                      <b>Genre:</b> ${item.fields.genre}<br>
+                      <b>Sinopsis:</b> ${item.fields.sinopsis}<br>
+                      <b>Rating:</b> ${item.fields.rating}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              `
+    })
+    htmlString += `</div>`
+    document.getElementById("manhwa_container").innerHTML = htmlString
   }
-  .navbar-brand {
-    color: white;
+  
+  refreshManhwas()
+
+  function addManhwa() {
+      fetch("{% url 'main:add_manhwa_ajax' %}", {
+          method: "POST",
+          body: new FormData(document.querySelector('#form'))
+      }).then(refreshManhwas)
+        
+      document.getElementById("form").reset()
+      return false
   }
-  .navbar-nav .nav-link {
-    color: white;
-  }
-  .card {
-    border-color: #4caf50;
-    background-color: #487eb0;
-  }
-  .card-title {
-    color: #353b48;
-  }
-  .card-text b {
-    color: #353b48;
-  }
-  .btn-light {
-    background-color: #4caf50;
-    color: white;
-  }
-  .btn-danger {
-    background-color: #f44336;
-    color: white;
-  }
-</style>
+
+  document.getElementById("button_add").onclick = addManhwa
+</script>
+
 {% endblock content %}

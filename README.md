@@ -890,38 +890,50 @@ Sementara itu, pada _asynchronous programming_, program dapat berjalan secara pa
 
 > Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
 
-Event-driven programming adalah sebuah paradigma di mana suatu kode dapat menunggu terjadinya suatu event/peristiwa terjadi sebelum kode tersebut dieksekusi. Contohnya, pada tugas kali ini, ada tombol untuk menambahkan manhwa dengan id `button_add` yang akan menjalankan fungsi `addManhwa` ketika terjadi event `onclick` (tombok diklik).
+Paradigma event-driven programming adalah paradigma pemrograman yang berfokus pada pengendalian peristiwa. Dalam paradigma ini, program berjalan berdasarkan serangkaian peristiwa yang terjadi. Contoh penerapan paradigma event-driven programming pada manhwa sebelumnya adalah saat tombol "Add Manhwa" diklik, maka akan muncul modal untuk menambahkan manhwa baru. Kemudian, saat tombol "Add Manhwa" pada modal diklik, maka akan menambahkan manhwa baru ke dalam daftar manhwa.
+```
+$("#button_add").on("click", function () {
+    $("#exampleModal").modal("show");
+});
+
+$("#form").on("submit", function (e) {
+    e.preventDefault();
+    addManhwa();
+    $("#exampleModal").modal("hide");
+});
+```
+Dalam contoh ini, ketika tombol "Add Manhwa" diklik, maka akan muncul modal untuk menambahkan manhwa baru. Kemudian, ketika tombol "Add Manhwa" pada modal diklik, maka akan menambahkan manhwa baru ke dalam daftar manhwa. Proses ini diendalikan melalui event-driven programming, yaitu dengan menggunakan event click pada tombol "Add Manhwa" untuk menampilkan modal dan menggunakan event submit pada form untuk menambahkan manhwa baru.
 
 > Jelaskan penerapan asynchronous programming pada AJAX.
 
-Penerapan _asynchronous programming_ pada AJAX memungkinkan _request_ ke server dan penanganan _response_ dilakukan secara _asynchronous_. Artinya, program javascript tidak akan terhenti saat menunggu _response_ dari server. Penerapannya dapat dilakukan dengan menambahkan `async` dan `await` pada javascript. Fungsi `async` digunakan untuk menandai fungsi sebagai fungsi yang dapat mengembalikan nilai secara _asynchronous_, sedangkan fungsi `await` digunakan untuk menunggu hasil dari fungsi `async`. Berikut adalah contoh penerapannya pada tugas ini.
+Pada AJAX, asynchronous programming digunakan untuk mengirimkan permintaan ke server tanpa menghambat proses utama. Dalam manhwa javascript, penerapan asynchronous programming pada AJAX terlihat pada fungsi $.ajax(). Fungsi ini mengirimkan permintaan ke server dan menunggu respons dari server tanpa menghambat proses utama.
 ```
-async function getItems() {
-    return fetch("{% url 'main:get_item_json' %}").then((res) => res.json())
-}
-
-async function refreshItems() {
-    ...
-    const manhwas = await getItems()
-    ...
+function addManhwa() {
+    let formData = $("#form").serializeArray();
+    $.ajax({
+        url: "{% url 'main:add_manhwa_ajax' %}",
+        method: "POST",
+        data: formData,
+    }).done(function () {
+        refreshManhwas();
+        $("#form")[0].reset();
+    });
+    return false;
 }
 ```
+Dalam contoh ini, fungsi $.ajax() mengirimkan permintaan ke server untuk menambahkan manhwa baru. Permintaan ini dijalankan secara asinkronus, yaitu tanpa menghambat proses utama. Setelah server memberikan respons, fungsi .done() akan dipanggil untuk memperbarui daftar manhwa dan mengosongkan form.
 
 > Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
 
-1. Fetch API
-- Lebih banyak didukung oleh browser modern
-- Menggunakan _fetch_ dan _response_
-- Lebih ringan karena hanya menggunakan javascript standar.
-- Menggunakan _promise_ untuk handle kode _asynchronous_.
+Fetch API dan library jQuery merupakan dua teknologi yang berbeda untuk melakukan AJAX pada manhwa. Fetch API adalah fitur bawaan dari browser yang mendukung Promises dan async/await. Sedangkan library jQuery merupakan library yang lebih populer dan komprehensif, tetapi menggunakan sintaks yang lebih berbeda.
 
-2. JQuery
-- Merupakan library eksternal javascript yang telah ada sejak lama dan telah digunakan secara luas di web.
-- Menggunakan callback _success_ dan _error_
-- Lebih berat karena menggunakan library eksternal.
-- Menggunakan callback untuk handle kode _asynchronous_.
+Berikut adalah perbandingan antara Fetch API dan library jQuery:
 
-Menurut saya, pilihan antara Fetch API dan JQuery tergantung pada kebutuhan proyek dan preferensi pribadi. Namun secara keseluruhan, Fetch API lebih bagus untuk digunakan untuk pengembangan aplikasi web modern yang ringan karena tidak perlu menggunakan library eksternal.
+* Fitur: Fetch API lebih modern dan mendukung Promises dan async/await, sementara library jQuery lebih populer dan komprehensif.<br>
+* Sintaks: Fetch API menggunakan sintaks yang lebih mudah dipahami dan lebih mirip dengan sintaks bawaan browser, sementara library jQuery menggunakan sintaks yang lebih berbeda.<br>
+* Ukuran: Fetch API lebih ringan daripada library jQuery, yang menghasilkan ukuran file yang lebih kecil.<br>
+* Kompatibilitas: Fetch API mungkin tidak kompatibel dengan browser yang lebih lama, sementara library jQuery mendukung browser yang lebih lama.<br>
+Berdasarkan perbandingan tersebut, pendapat saya adalah Fetch API lebih baik untuk digunakan karena lebih mudah dipahami, lebih modern, dan lebih ringan. Namun, jika ingin mendukung browser yang lebih lama, mungkin lebih baik menggunakan library jQuery yang lebih komprehensif.
 
 > Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 <br> *Sudah diatas*
