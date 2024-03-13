@@ -859,26 +859,29 @@ Margin: mengosongkan area di sekitar border (transparan). Digunakan untuk mengat
 
 [ ] Mengubah tugas 5 yang telah dibuat sebelumnya menjadi menggunakan AJAX.
 
-  [ ] AJAX GET
+* AJAX GET
+  
+** Ubahlah kode cards data item agar dapat mendukung AJAX GET.
+  
+Menambahkan kode berikut sebagai struktur dari cards data manhwa.
 
-    [ ] Ubahlah kode cards data item agar dapat mendukung AJAX GET.
-    
-    Menambahkan kode berikut sebagai struktur dari cards data manhwa.
-    ```html
-    <div id="manhwa_container"></div>
-    ```
-    Kemudian membuat tag baru, yaitu <Script> dan menambahkan fungsi yang menggunakan fetch() API ke data JSON secara asynchronous dibawah ini.
-    ```javascript
+```html
+<div id="manhwa_container"></div>
+```
+
+Kemudian membuat tag baru, yaitu `<script>` dan menambahkan fungsi yang menggunakan fetch() API ke data JSON secara asynchronous dibawah ini.
+```javascript
     <script>
       async function getManhwas() {
           return fetch("{% url 'main:show_json' %}").then((res) => res.json())
       }
     </script>
-    ```
-    [ ] Lakukan pengambilan task menggunakan AJAX GET.
+```
+** Lakukan pengambilan task menggunakan AJAX GET.
 
-    Selanjutnya menambahkan fungsi baru pada tag <script> dengan nama refreshManhwas() yang digunakan untuk me-refresh data manhwa secara asynchronous.
-    ```javascript
+Selanjutnya menambahkan fungsi baru pada tag `<script>` dengan nama `refreshManhwas()` yang digunakan untuk me-refresh data manhwa secara asynchronous.
+
+```javascript
     async function refreshManhwas() {
       document.getElementById("manhwa_container").innerHTML = ""
       const manhwas = await getManhwas();
@@ -906,17 +909,15 @@ Margin: mengosongkan area di sekitar border (transparan). Digunakan untuk mengat
     }
     
     refreshManhwas()
-    ```
-    document.getElementById("manhwa)_container") digunakan untuk mendapatkan elemen berdasarkan ID nya. Pada baris kode ini, elemen yang dituju adalah tag <div> dengan ID manhwa_container yang sudah dibuat pada tahapan sebelumnya.
+```
+`document.getElementById("manhwa)_container")` digunakan untuk mendapatkan elemen berdasarkan ID nya. Pada baris kode ini, elemen yang dituju adalah tag `<div>` dengan ID manhwa_container yang sudah dibuat pada tahapan sebelumnya.
 
-  [ ] AJAX POST
+* AJAX POST
 
-    [ ] Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan item.
+** Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan item.
 
-    Pertama, membuat modal sebagai form untuk menambahkan Manhwa
-    ```html
-    <div id="manhwa_container"></div>
-
+Pertama, membuat modal sebagai form untuk menambahkan Manhwa
+```html
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="modal-content">
@@ -956,13 +957,13 @@ Margin: mengosongkan area di sekitar border (transparan). Digunakan untuk mengat
           </div>
       </div>
     </div>
-    ```
-    Kemudian menambahkan button yang berfungsi untuk menampilkan modal.
-    ```
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Manhwa by AJAX</button>
-    ```
+```
+Kemudian menambahkan button yang berfungsi untuk menampilkan modal.
+```html
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Manhwa by AJAX</button>
+```
 
-  >Modal di-trigger dengan menekan suatu tombol pada halaman utama. Saat penambahan item berhasil, modal harus ditutup dan input form harus dibersihkan dari data yang sudah dimasukkan ke dalam form sebelumnya.
+> Modal di-trigger dengan menekan suatu tombol pada halaman utama. Saat penambahan item berhasil, modal harus ditutup dan input form harus dibersihkan dari data yang sudah dimasukkan ke dalam form sebelumnya.
 
 [ ] Buatlah fungsi view baru untuk menambahkan item baru ke dalam basis data.
 
